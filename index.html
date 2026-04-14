@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Student Management System</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="background-decoration"></div>
+
+    <nav class="navbar">
+        <div class="navbar-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <span>StudentHub</span>
+            </div>
+            <div class="nav-actions">
+                <button class="nav-btn" onclick="toggleTheme()" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="nav-btn" onclick="showStats()" title="Statistics">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="badge" id="totalBadge">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div class="header-text">
+                    <h1>Student Management System</h1>
+                    <p>Professional student record management platform</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="exportToCSV()" title="Export">
+                        <i class="fas fa-download"></i> Export
+                    </button>
+                    <button class="btn btn-secondary" onclick="importStudents()" title="Import">
+                        <i class="fas fa-upload"></i> Import
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearAll()" title="Clear All">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Dashboard -->
+        <div class="stats-container" id="statsContainer">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <div>
+                    <h3 id="statTotal">0</h3>
+                    <p>Total Students</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-award"></i>
+                <div>
+                    <h3 id="statAvgGPA">0.00%</h3>
+                    <p>Average GPA</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar"></i>
+                <div>
+                    <h3 id="statAvgAge">0</h3>
+                    <p>Average Age</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-star"></i>
+                <div>
+                    <h3 id="statTopGPA">0.00%</h3>
+                    <p>Highest GPA</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+            <div class="form-header">
+                <h2>
+                    <i class="fas fa-id-card"></i>
+                    Add / Edit Student
+                </h2>
+                <button class="btn-collapse" onclick="toggleFormCollapse()" id="collapseBtn">
+                    <i class="fas fa-chevron-up"></i>
+                </button>
+            </div>
+
+            <div class="form-content" id="formContent">
+                <div class="input-container">
+                    <div class="input-group">
+                        <label for="name">Full Name <span class="required">*</span></label>
+                        <input type="text" placeholder="Enter student name" id="name" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" placeholder="Enter email address" id="email" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" placeholder="Enter phone number" id="phone" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="regNumber">Registration Number <span class="required">*</span></label>
+                        <input type="text" placeholder="Auto-generated" id="regNumber" readonly>
+                        <small style="color: #999; margin-top: 4px;">Auto-generated based on department and year</small>
+                    </div>
+                    <div class="input-group">
+                        <label for="dob">Date of Birth <span class="required">*</span></label>
+                        <input type="date" id="dob" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="age">Age <span class="required">*</span></label>
+                        <input type="number" placeholder="Auto-calculated" id="age" min="1" max="100" readonly>
+                    </div>
+                    <div class="input-group">
+                        <label for="degree">Degree Program <span class="required">*</span></label>
+                        <select id="degree" required>
+                            <option value="">Select degree</option>
+                            <option value="Bachelor of Science">Bachelor of Science (BSc)</option>
+                            <option value="Bachelor of Arts">Bachelor of Arts (BA)</option>
+                            <option value="Master of Science">Master of Science (MSc)</option>
+                            <option value="Master of Business">Master of Business (MBA)</option>
+                            <option value="Doctor of Philosophy">Doctor of Philosophy (PhD)</option>
+                            <option value="Bechlor of Computer">Bechlor of Computer(BCA)</option>
+                            <option value="master of Computer">Master of Computer(MCA)</option>
+                             <option value="Diploma">Diploma</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="grade">GPA/Percentage <span class="required">*</span></label>
+                        <input type="number" placeholder="0 - 100%" id="grade" min="0" max="100" step="0.01" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="department">Department <span class="required">*</span></label>
+                        <select id="department" required>
+                            <option value="">Select department</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Business">Business</option>
+                            <option value="Science">Science</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Medicine">Medicine</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-primary" id="submit" onclick="addStudent()">
+                        <i class="fas fa-save"></i> Save Student
+                    </button>
+                    <button class="btn btn-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters & Search -->
+        <div class="filter-card">
+            <div class="search-section">
+                <i class="fas fa-search search-icon"></i>
+                <input class="search" type="text" id="search" onkeyup="search()"
+                    placeholder="Search by name, email, reg number...">
+            </div>
+            <div class="filter-section">
+                <select id="departmentFilter" onchange="applyFilters()" class="filter-select">
+                    <option value="">All Departments</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Business">Business</option>
+                    <option value="Science">Science</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Medicine">Medicine</option>
+                </select>
+                <select id="sortBy" onchange="applySort()" class="filter-select">
+                    <option value="id">Sort by ID</option>
+                    <option value="name">Sort by Name</option>
+                    <option value="gpa">Sort by GPA (High to Low)</option>
+                    <option value="age">Sort by Age</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="table-card">
+            <div class="table-header">
+                <h3><i class="fas fa-table"></i> Student Records</h3>
+                <div class="view-options">
+                    <button class="view-btn active" onclick="switchView('table')" title="Table View">
+                        <i class="fas fa-table"></i>
+                    </button>
+                    <button class="view-btn" onclick="switchView('card')" title="Card View">
+                        <i class="fas fa-th"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table View -->
+            <div id="tableView" class="table-view">
+                <table class="table" id="table">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Reg Number</th>
+                            <th>GPA</th>
+                            <th>Degree</th>
+                            <th>Department</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        <tr class="empty-state">
+                            <td colspan="10">
+                                <i class="fas fa-inbox"></i>
+                                <p>No students found. Add one to get started!</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Card View -->
+            <div id="cardView" class="card-view hidden" id="studentCards"></div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="paginationContainer"></div>
+    </div>
+
+    <!-- Modal for confirmation -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Confirm Action</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirmBtn" onclick="executeConfirm()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden input for file import -->
+    <input type="file" id="fileInput" accept=".csv,.json" style="display: none;" onchange="handleFileImport()">
+
+    <script src="./script.js"></script>
+</body>
+
+</html>
