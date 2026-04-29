@@ -19,13 +19,37 @@ const DEPT_CODES = {
     'Medicine': 'MD'
 };
 
+// ========== AGE CALCULATION ==========
+function calculateAge() {
+    const dob = document.getElementById('dob').value;
+    if (!dob) {
+        document.getElementById('age').value = '';
+        return;
+    }
+
+    const birthDate = new Date(dob);
+    const today = new Date();
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    // Adjust if birthday hasn't occurred this year
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+
+    document.getElementById('age').value = age >= 0 ? age : '';
+}
+
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
     loadStudentsFromStorage();
     loadDeptCounters();
     showTable();
     updateStats();
-    document.getElementById('dob').addEventListener('change', calculateAge);
+    const dobInput = document.getElementById('dob');
+    if (dobInput) {
+        dobInput.addEventListener('change', calculateAge);
+    }
 });
 
 // ========== LOCAL STORAGE ==========
