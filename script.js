@@ -58,22 +58,19 @@ function saveDeptCounters() {
 }
 
 function loadDeptCounters() {
-    const stored = localStorage.getItem('deptCounters');
-    if (stored) {
-        deptCounters = JSON.parse(stored);
-    } else {
-        // Initialize counters from existing students
-        deptCounters = {};
-        Object.values(DEPT_CODES).forEach(code => {
-            deptCounters[code] = 0;
-        });
-        // Count existing students per department
-        students.forEach(student => {
-            const deptCode = DEPT_CODES[student.department] || 'UN';
-            deptCounters[deptCode] = (deptCounters[deptCode] || 0) + 1;
-        });
-        saveDeptCounters();
-    }
+    // Always initialize with all department codes set to 0
+    deptCounters = {};
+    Object.keys(DEPT_CODES).forEach(dept => {
+        deptCounters[DEPT_CODES[dept]] = 0;
+    });
+
+    // Count existing students per department from the loaded students array
+    students.forEach(student => {
+        const deptCode = DEPT_CODES[student.department] || 'UN';
+        deptCounters[deptCode] = (deptCounters[deptCode] || 0) + 1;
+    });
+
+    saveDeptCounters();
 }
 
 function saveStudentsToStorage() {
